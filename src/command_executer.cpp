@@ -17,6 +17,7 @@ void executeCommand(const std::vector<std::string>& tokens) {
     std::string path = getPath(command);
     if (path.empty()) {
       commandNotFound(command);
+      return;
     }
 
     // external exe
