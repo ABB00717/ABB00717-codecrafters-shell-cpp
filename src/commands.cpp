@@ -1,4 +1,5 @@
 #include "../include/commands.h"
+#include <cstdio>
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
@@ -88,5 +89,8 @@ void handleExternalProgram(const std::string &command,
 }
 
 void handlePwd() {
-  std::cout << std::filesystem::current_path() << std::endl;
+  char buffer[FILENAME_MAX];
+  if (getcwd(buffer, FILENAME_MAX)) {
+    std::cout << buffer << std::endl;
+  }
 }
