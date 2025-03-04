@@ -1,9 +1,9 @@
 #include <iostream>
 #include <ostream>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <set>
 
 const std::set<std::string> validCommands = {"echo", "exit", "type"};
 
@@ -11,11 +11,11 @@ void commandNotFound(std::string command) {
   std::cout << command << ": command not found\n";
 }
 
-bool inputCommand(std::string& input) {
+bool inputCommand(std::string &input) {
   std::cout << "$ ";
   if (std::getline(std::cin, input))
     return true;
-  
+
   return false;
 }
 
@@ -45,14 +45,14 @@ int main() {
       std::cout << output << std::endl;
     } else if (command == "type" && args.size() == 1) {
       std::string targetCommand = args[0];
-      
+
       if (validCommands.count(targetCommand)) {
         std::cout << targetCommand << " is a shell builtin" << std::endl;
       } else {
-        commandNotFound(targetCommand);
+        std::cout << command << ": not found\n";
       }
     } else {
-      commandNotFound(command);
+      std::cout << command << ": command not found\n";
     }
   }
 }
