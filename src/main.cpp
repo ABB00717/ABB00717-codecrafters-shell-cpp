@@ -1,6 +1,8 @@
 #include <iostream>
+#include <iterator>
 #include <sstream>
 #include <string>
+#include <vector>
 
 bool inputCommand(std::string& input) {
   std::cout << "$ ";
@@ -18,13 +20,24 @@ int main() {
   std::string input;
   while (inputCommand(input)) {
     std::stringstream ss(input);
-    std::string command;
-    int arg;
-    ss >> command >> arg;
+    std::string command, arg;
+    std::vector<std::string> args;
+    ss >> command;
+    while (ss >> arg)
+      args.push_back(arg);
 
-    if (command == "exit" && arg == 0)
+    if (command == "exit" && args.size() == 1 && args[0] == "0") {
       return 0;
-    
-    std::cout << input << ": command not found\n";
+    } else if (command == "echo" && args.size() > 0) {
+      std::string output = "";
+      for (auto arg : args) {
+        output += arg;
+        output += " ";
+      }
+      output.pop_back();
+      std::cout << output << std::endl;
+    } else {
+      std::cout << input << ": command not found\n";
+    }
   }
 }
