@@ -14,6 +14,12 @@ void executeCommand(const std::vector<std::string>& tokens) {
   } else if (command == "type") {
     handleType(args);
   } else {
-    commandNotFound(command);
+    std::string path = getPath(command);
+    if (path.empty()) {
+      commandNotFound(command);
+    }
+
+    // external exe
+    handleExternalProgram(command, args);
   }
 }
