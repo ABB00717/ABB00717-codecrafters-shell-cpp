@@ -15,6 +15,8 @@ void executeCommand(const std::vector<std::string>& tokens) {
     handleType(args);
   } else if (command == "pwd") {
     handlePwd();
+  } else if (command == "cd") {
+    handleCd(args);
   } else {
     std::string path = getPath(command);
     if (path.empty()) {

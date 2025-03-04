@@ -1,4 +1,5 @@
 #include "../include/utils.h"
+#include <cstdio>
 
 bool inputCommand(std::string &input) {
   std::cout << "$ ";

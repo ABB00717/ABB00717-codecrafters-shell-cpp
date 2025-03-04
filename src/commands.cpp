@@ -1,13 +1,15 @@
 #include "../include/commands.h"
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
-#include <filesystem>
 #include <iostream>
+#include <iterator>
 #include <ostream>
 #include <sched.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <vector>
 
 void commandNotFound(const std::string &command) {
   std::cout << command << ": command not found\n";
@@ -50,10 +52,10 @@ void handleType(const std::vector<std::string> &args) {
   }
 
   std::string targetCommand = args[0];
-  std::string path = getPath(targetCommand);
   if (validCommands.count(targetCommand)) {
     std::cout << targetCommand << " is a shell builtin" << std::endl;
   } else {
+    std::string path = getPath(targetCommand);
     if (path.empty()) {
       std::cout << targetCommand << ": not found\n";
     } else {
@@ -92,5 +94,29 @@ void handlePwd() {
   char buffer[FILENAME_MAX];
   if (getcwd(buffer, FILENAME_MAX)) {
     std::cout << buffer << std::endl;
+  }
+}
+
+void handleCd(const std::vector<std::string> &args) {
+  if (args.size() > 1) {
+    std::cerr << "Error: No more than two directories should appear." << std::endl;
+    return;
+  } else if (args.empty()) {
+    const char* homeDir = getenv("HOME");
+    if (homeDir == nullptr) {
+      std::cerr << "Error: Unable to get the home directory." << std::endl;
+    }
+    
+    if (chdir(homeDir) != 0) {
+      std::cerr << "Error: Unable to switch to the home directory." << std::endl;
+      return;
+    }
+  } else {
+    const char* newPath = const_cast<char *>(args[0].c_str());
+
+    if (chdir(newPath) != 0) {
+      std::cerr << "cd: " << newPath << ": No such file or directory" << std::endl;
+      return;
+    }
   }
 }
