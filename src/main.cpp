@@ -49,7 +49,7 @@ int main() {
       if (validCommands.count(targetCommand)) {
         std::cout << targetCommand << " is a shell builtin" << std::endl;
       } else {
-        std::cout << command << ": not found\n";
+        std::cout << targetCommand << ": not found\n";
       }
     } else {
       std::cout << command << ": command not found\n";
