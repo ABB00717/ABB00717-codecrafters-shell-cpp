@@ -8,7 +8,7 @@
 #include <vector>
 #include "utils.h"
 
-const std::unordered_set<std::string> validCommands = {"echo", "exit", "type"};
+const std::unordered_set<std::string> validCommands = {"echo", "exit", "type", "pwd"};
 void commandNotFound(const std::string& command);
 void handleEcho(const std::vector<std::string> &args);
 void handleExit(const std::vector<std::string> &args);
