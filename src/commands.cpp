@@ -1,9 +1,7 @@
 #include "../include/commands.h"
-#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <iterator>
 #include <ostream>
 #include <sched.h>
 #include <sys/types.h>
