@@ -3,9 +3,10 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
-const std::set<std::string> validCommands = {"echo", "exit", "type"};
+const std::unordered_set<std::string> validCommands = {"echo", "exit", "type"};
 
 void commandNotFound(std::string command) {
   std::cout << command << ": command not found\n";
@@ -45,7 +46,6 @@ int main() {
       std::cout << output << std::endl;
     } else if (command == "type" && args.size() == 1) {
       std::string targetCommand = args[0];
-
       if (validCommands.count(targetCommand)) {
         std::cout << targetCommand << " is a shell builtin" << std::endl;
       } else {
