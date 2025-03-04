@@ -96,10 +96,10 @@ void handlePwd() {
 }
 
 void handleCd(const std::vector<std::string> &args) {
-  if (args.size() > 1) {
-    std::cerr << "Error: No more than two directories should appear." << std::endl;
+  if (args.size() > 1 || args.empty()) {
+    std::cerr << "Error: There should be only one directory." << std::endl;
     return;
-  } else if (args.empty()) {
+  } else if (args[0] == "~") {
     const char* homeDir = getenv("HOME");
     if (homeDir == nullptr) {
       std::cerr << "Error: Unable to get the home directory." << std::endl;
