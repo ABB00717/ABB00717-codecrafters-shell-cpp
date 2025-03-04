@@ -14,5 +14,6 @@ void handleEcho(const std::vector<std::string> &args);
 void handleExit(const std::vector<std::string> &args);
 void handleType(const std::vector<std::string> &args);
 void handleExternalProgram(const std::string& command, const std::vector<std::string> &args);
+void handlePwd();
 
 #endif

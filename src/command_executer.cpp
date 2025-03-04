@@ -13,6 +13,8 @@ void executeCommand(const std::vector<std::string>& tokens) {
     handleEcho(args);
   } else if (command == "type") {
     handleType(args);
+  } else if (command == "pwd") {
+    handlePwd();
   } else {
     std::string path = getPath(command);
     if (path.empty()) {

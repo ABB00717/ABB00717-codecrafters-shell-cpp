@@ -1,6 +1,8 @@
 #include "../include/commands.h"
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
+#include <ostream>
 #include <sched.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -83,4 +85,8 @@ void handleExternalProgram(const std::string &command,
     int status;
     waitpid(pid, &status, 0);
   }
+}
+
+void handlePwd() {
+  std::cout << std::filesystem::current_path() << std::endl;
 }
