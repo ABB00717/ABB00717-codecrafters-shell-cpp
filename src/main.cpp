@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 
 bool inputCommand(std::string& input) {
@@ -15,6 +16,15 @@ int main() {
   std::cerr << std::unitbuf;
 
   std::string input;
-  while (inputCommand(input))
+  while (inputCommand(input)) {
+    std::stringstream ss(input);
+    std::string command;
+    int arg;
+    ss >> command >> arg;
+
+    if (command == "exit" && arg == 0)
+      return 0;
+    
     std::cout << input << ": command not found\n";
+  }
 }
