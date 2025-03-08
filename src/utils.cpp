@@ -22,10 +22,14 @@ std::vector<std::string> parseInputs(const std::string& input) {
 
   while (ss.get(c)) {
     if (c == '\'') {
-      insideQuotes = !insideQuotes;
-      if (!insideQuotes) {
-        tokens.push_back(currentToken);
-        currentToken.clear();
+      if (insideQuotes) {
+        if (ss.peek() == '\'') {
+          ss.get();
+        } else {
+          insideQuotes = !insideQuotes;
+          tokens.push_back(currentToken);
+          currentToken.clear();
+        }
       }
     } else if (std::isspace(c) && !insideQuotes) {
       if (!currentToken.empty()) {
