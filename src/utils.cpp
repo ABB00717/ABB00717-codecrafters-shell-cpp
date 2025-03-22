@@ -87,17 +87,17 @@ std::string tabComplete(const std::string& input) {
         return "";
     }
 
+    if (candidates.size() == 1) {
+        multiTabCount = 0;
+        lastPrefix.clear();
+        return *candidates.begin() + " ";
+    }
+
     std::string commonPrefix = getLongestCommonPrefix(candidates);
     if (commonPrefix.size() > input.size()) {
         multiTabCount = 0;
         lastPrefix.clear();
         return commonPrefix;
-    }
-    
-    if (candidates.size() == 1) {
-        multiTabCount = 0;
-        lastPrefix.clear();
-        return *candidates.begin() + " ";
     }
 
     if (prefix != lastPrefix) {
