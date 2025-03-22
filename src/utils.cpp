@@ -69,8 +69,11 @@ std::string tabComplete(const std::string& input) {
     //     }
     // }
 
-    if (candidates.empty()) return "";
-
+    if (candidates.empty()) {
+        std::cout << "\a";
+        return "";
+    }
+    
     if (candidates.size() == 1) {
         return candidates[0] + " ";
     }
