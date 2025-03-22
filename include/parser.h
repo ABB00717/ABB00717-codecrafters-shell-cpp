@@ -3,10 +3,13 @@
 
 #include <string>
 #include <vector>
+#include <unistd.h> // for STDOUT_FILENO
 
 struct CommandNode {
     std::vector<std::string> args;
     std::string outputFile;
+
+    int outputFd = STDOUT_FILENO;
 };
 
 std::vector<std::string> parseInputs(const std::string& input);

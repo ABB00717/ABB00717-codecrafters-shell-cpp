@@ -69,6 +69,16 @@ std::vector<CommandNode*> parseCommands(const std::vector<std::string> &tokens) 
         } else if (tok == ">" || tok == "1>") {
             if (i + 1 < tokens.size()) {
                 current->outputFile = tokens[++i];
+                current->outputFd = STDOUT_FILENO;
+            } else {
+                std::cerr << "Syntax error: no output file specified\n";
+                delete current;
+                return {};
+            }
+        } else if (tok == "2>") {
+            if (i + 1 < tokens.size()) {
+                current->outputFile = tokens[++i];
+                current->outputFd = STDERR_FILENO;
             } else {
                 std::cerr << "Syntax error: no output file specified\n";
                 delete current;

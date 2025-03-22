@@ -18,16 +18,16 @@ void dispatchCommands(std::vector<CommandNode*> commands) {
             return;
         }
 
-        savedStdout = dup(STDOUT_FILENO);
+        savedStdout = dup(cmd->outputFd);
 
-        dup2(outputFd, STDOUT_FILENO);
+        dup2(outputFd, cmd->outputFd);
         close(outputFd);
     }
 
     runSingleCommand(cmd->args);
 
     if (savedStdout != -1) {
-        dup2(savedStdout, STDOUT_FILENO);
+        dup2(savedStdout, cmd->outputFd);
         close(savedStdout);
     }
 }
