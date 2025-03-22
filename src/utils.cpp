@@ -3,70 +3,70 @@
 #include <cstdio>
 #include <string>
 
-bool inputCommand(std::string &input) {
-  std::cout << "$ ";
-  if (std::getline(std::cin, input))
-    return true;
+bool inputCommand(std::string& input) {
+    std::cout << "$ ";
+    if (std::getline(std::cin, input))
+        return true;
 
-  return false;
+    return false;
 }
 
 std::vector<std::string> parseInputs(const std::string& input) {
-  std::stringstream ss(input);
-  std::string token;
-  std::vector<std::string> tokens;
+    std::stringstream ss(input);
+    char c;
+    std::vector<std::string> tokens;
 
-  char c;
-  bool insideQuotes = false;
-  std::string currentToken;
+    bool insideSingleQuotes = false;
+    bool insideDoubleQuotes = false;
+    std::string currentToken;
 
-  while (ss.get(c)) {
-    if (c == '\'') {
-      if (insideQuotes) {
-        if (ss.peek() == '\'') {
-          ss.get();
+    while (ss.get(c)) {
+        if (c == '\'' && !insideDoubleQuotes) {
+            insideSingleQuotes = !insideSingleQuotes;
+            if (!insideSingleQuotes && !currentToken.empty()) {
+                tokens.push_back(currentToken);
+                currentToken.clear();
+            }
+        } else if (c == '"' && !insideSingleQuotes) {
+            insideDoubleQuotes = !insideDoubleQuotes;
+            if (!insideDoubleQuotes && !currentToken.empty()) {
+                tokens.push_back(currentToken);
+                currentToken.clear();
+            }
+        } else if (std::isspace(c) && !insideSingleQuotes && !insideDoubleQuotes) {
+            if (!currentToken.empty()) {
+                tokens.push_back(currentToken);
+                currentToken.clear();
+            }
         } else {
-          insideQuotes = false;
-          tokens.push_back(currentToken);
-          currentToken.clear();
+            currentToken += c;
         }
-      } else {
-        insideQuotes = true;
-      }
-    } else if (std::isspace(c) && !insideQuotes) {
-      if (!currentToken.empty()) {
-        tokens.push_back(currentToken);
-        currentToken.clear();
-      }
-    } else {
-      currentToken += c;
     }
-  }
 
-  if (!currentToken.empty()) {
-    tokens.push_back(currentToken);
-  }
+    if (!currentToken.empty()) {
+        tokens.push_back(currentToken);
+    }
 
-  return tokens;
+    return tokens;
 }
 
 std::string getPath(std::string command) {
-  try {
-    std::string path_env = std::getenv("PATH");
-    
-    std::stringstream ss(path_env);
-    std::string path;
-    
-    while (std::getline(ss, path, ':')) {
-      std::filesystem::path abs_path = path;
-      abs_path /= command;
-      if (std::filesystem::exists(abs_path)) {
-        return abs_path.string();
-      }
-    }
-  } catch (...) {
-    return "";
-  }
+    try {
+        std::string path_env = std::getenv("PATH");
 
-  return "";
+        std::stringstream ss(path_env);
+        std::string path;
+
+        while (std::getline(ss, path, ':')) {
+            std::filesystem::path abs_path = path;
+            abs_path /= command;
+            if (std::filesystem::exists(abs_path)) {
+                return abs_path.string();
+            }
+        }
+    } catch (...) {
+        return "";
+    }
+
+    return "";
 }
