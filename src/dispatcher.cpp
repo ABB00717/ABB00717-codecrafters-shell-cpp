@@ -12,7 +12,14 @@ void dispatchCommands(std::vector<CommandNode*> commands) {
     int outputFd = -1;
 
     if (!cmd->outputFile.empty()) {
-        outputFd = open(cmd->outputFile.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        int flags = O_WRONLY | O_CREAT;
+        if (cmd->appendMode) {
+            flags |= O_APPEND;
+        } else {
+            flags |= O_TRUNC;
+        }
+        
+        outputFd = open(cmd->outputFile.c_str(), flags, 0644);
         if (outputFd < 0) {
             perror("open outputfile");
             return;

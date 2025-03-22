@@ -70,24 +70,27 @@ std::vector<CommandNode*> parseCommands(const std::vector<std::string> &tokens) 
             if (i + 1 < tokens.size()) {
                 current->outputFile = tokens[++i];
                 current->outputFd = STDOUT_FILENO;
-            } else {
-                std::cerr << "Syntax error: no output file specified\n";
-                delete current;
-                return {};
+                current->appendMode = false;
             }
         } else if (tok == "2>") {
             if (i + 1 < tokens.size()) {
                 current->outputFile = tokens[++i];
                 current->outputFd = STDERR_FILENO;
-            } else {
-                std::cerr << "Syntax error: no output file specified\n";
-                delete current;
-                return {};
+                current->appendMode = false;
             }
-        } else if (tok == ">>") {
-
+        } else if (tok == ">>" || tok == "1>>") {
+            if (i + 1 < tokens.size()) {
+                current->outputFile = tokens[++i];
+                current->outputFd = STDOUT_FILENO;
+                current->appendMode = true;
+            }
+        } else if (tok == "2>>") {
+            if (i + 1 < tokens.size()) {
+                current->outputFile = tokens[++i];
+                current->outputFd = STDERR_FILENO;
+                current->appendMode = true;
+            }
         } else if (tok == "<") {
-
         } else {
             current->args.push_back(tok);
         }

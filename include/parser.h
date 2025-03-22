@@ -10,6 +10,7 @@ struct CommandNode {
     std::string outputFile;
 
     int outputFd = STDOUT_FILENO;
+    bool appendMode = false;
 };
 
 std::vector<std::string> parseInputs(const std::string& input);
