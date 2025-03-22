@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <iostream>
 #include <ostream>
+#include <set>
 #include <string>
 
 bool inputCommand(std::string& input) {
@@ -48,11 +49,11 @@ bool inputCommand(std::string& input) {
 std::string tabComplete(const std::string& input) {
     std::string prefix = input;
 
-    std::vector<std::string> candidates;
+    std::set<std::string> candidates;
 
     for (const auto& cmd : validCommands) {
         if (cmd.find(prefix) == 0) {
-            candidates.push_back(cmd);
+            candidates.insert(cmd);
         }
     }
 
@@ -69,7 +70,7 @@ std::string tabComplete(const std::string& input) {
             for (const auto& entry : std::filesystem::directory_iterator(path)) {
                 std::string filename = entry.path().filename().string();
                 if (filename.find(prefix) == 0) {
-                    candidates.push_back(filename);
+                    candidates.insert(filename);
                 }
             }
         } catch (const std::filesystem::filesystem_error& e) {
@@ -83,7 +84,7 @@ std::string tabComplete(const std::string& input) {
     }
 
     if (candidates.size() == 1) {
-        return candidates[0] + " ";
+        return *candidates.begin() + " ";
     }
 
     std::cout << std::endl;
