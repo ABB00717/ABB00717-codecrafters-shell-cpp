@@ -56,24 +56,32 @@ std::string tabComplete(const std::string& input) {
         }
     }
 
-    // std::string path_env = std::getenv("PATH");
-    // std::stringstream ss(path_env);
-    // std::string path;
+    std::string path_env = std::getenv("PATH");
+    std::stringstream ss(path_env);
+    std::string path;
 
-    // while (std::getline(ss, path, ':')) {
-    //     for (const auto& entry : std::filesystem::directory_iterator(path)) {
-    //         std::string filename = entry.path().filename().string();
-    //         if (filename.find(prefix) == 0) {
-    //             candidates.push_back(filename);
-    //         }
-    //     }
-    // }
+    while (std::getline(ss, path, ':')) {
+        try {
+            if (!std::filesystem::exists(path) || !std::filesystem::is_directory(path)) {
+                continue;
+            }
+            
+            for (const auto& entry : std::filesystem::directory_iterator(path)) {
+                std::string filename = entry.path().filename().string();
+                if (filename.find(prefix) == 0) {
+                    candidates.push_back(filename);
+                }
+            }
+        } catch (const std::filesystem::filesystem_error& e) {
+            continue;
+        }
+    }
 
     if (candidates.empty()) {
         std::cout << "\a";
         return "";
     }
-    
+
     if (candidates.size() == 1) {
         return candidates[0] + " ";
     }
