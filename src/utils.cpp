@@ -23,16 +23,8 @@ std::vector<std::string> parseInputs(const std::string& input) {
     while (ss.get(c)) {
         if (c == '\'' && !insideDoubleQuotes) {
             insideSingleQuotes = !insideSingleQuotes;
-            if (!insideSingleQuotes && !currentToken.empty()) {
-                tokens.push_back(currentToken);
-                currentToken.clear();
-            }
         } else if (c == '"' && !insideSingleQuotes) {
             insideDoubleQuotes = !insideDoubleQuotes;
-            if (!insideDoubleQuotes && !currentToken.empty()) {
-                tokens.push_back(currentToken);
-                currentToken.clear();
-            }
         } else if (std::isspace(c) && !insideSingleQuotes && !insideDoubleQuotes) {
             if (!currentToken.empty()) {
                 tokens.push_back(currentToken);
