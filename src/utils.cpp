@@ -47,6 +47,8 @@ bool inputCommand(std::string& input) {
 }
 
 std::string tabComplete(const std::string& input) {
+    static int multiTabCount = 0;
+    static std::string lastPrefix;
     std::string prefix = input;
 
     std::set<std::string> candidates;
@@ -87,11 +89,22 @@ std::string tabComplete(const std::string& input) {
         return *candidates.begin() + " ";
     }
 
-    std::cout << std::endl;
-    for (const auto& cand : candidates) {
-        std::cout << cand << "  ";
+    if (prefix != lastPrefix) {
+        multiTabCount = 1;
+        lastPrefix = prefix;
+        std::cout << "\a" << std::flush;
+    } else {
+        multiTabCount++;
     }
-    std::cout << std::endl << "$ " << prefix << std::flush;
+
+    if (multiTabCount == 2) {
+        std::cout << std::endl;
+        for (const auto& cand : candidates) {
+            std::cout << cand << "  ";
+        }
+        std::cout << std::endl << "$ " << prefix << std::flush;
+        multiTabCount = 0;
+    }
 
     return prefix;
 }
