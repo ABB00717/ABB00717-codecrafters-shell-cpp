@@ -1,13 +1,11 @@
-#include "../include/command_executer.h"
+#include "../include/executor.h"
 #include <string>
 #include <vector>
 
-void executeCommand(const std::vector<std::string>& tokens) {
+void runSingleCommand(const std::vector<std::string>& tokens) {
     if (tokens.empty())
         return;
 
-    std::vector<std::string> cmdTokens;
-        
     std::string command = tokens[0];
     std::vector<std::string> args(tokens.begin() + 1, tokens.end());
 

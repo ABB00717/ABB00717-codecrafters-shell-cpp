@@ -5,8 +5,9 @@
 #include <ostream>
 #include <string>
 #include <vector>
-#include "../include/command_executer.h"
 #include "../include/utils.h"
+#include "../include/parser.h"
+#include "../include/dispatcher.h"
 
 int main() {
     // Flush after every std::cout / std:cerr
@@ -16,6 +17,10 @@ int main() {
     std::string input;
     while (inputCommand(input)) {
         std::vector<std::string> tokens = parseInputs(input);
-        executeCommand(tokens);
+        std::vector<CommandNode*> commands = parseCommands(tokens);
+
+        dispatchCommands(commands);
+        for (auto command : commands)
+            delete command;
     }
 }

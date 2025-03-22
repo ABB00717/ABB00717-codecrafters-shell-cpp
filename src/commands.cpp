@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <ostream>
+#include <sstream>
 #include <vector>
 
 void commandNotFound(const std::string& command) {
@@ -19,7 +20,7 @@ void handleEcho(const std::vector<std::string>& args) {
         return;
     }
 
-    std::ostringstream output;
+    std::stringstream output;
     for (const auto& arg : args) {
         output << arg << " ";
     }

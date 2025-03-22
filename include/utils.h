@@ -9,7 +9,6 @@
 #include <vector>
 
 bool inputCommand(std::string& input);
-std::vector<std::string> parseInputs(const std::string& input);
 std::string getPath(std::string command);
 
 #endif
