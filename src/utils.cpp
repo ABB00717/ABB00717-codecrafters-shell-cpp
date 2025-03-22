@@ -82,10 +82,21 @@ std::string tabComplete(const std::string& input) {
 
     if (candidates.empty()) {
         std::cout << "\a";
+        multiTabCount = 0;
+        lastPrefix.clear();
         return "";
     }
 
+    std::string commonPrefix = getLongestCommonPrefix(candidates);
+    if (commonPrefix.size() > input.size()) {
+        multiTabCount = 0;
+        lastPrefix.clear();
+        return commonPrefix;
+    }
+    
     if (candidates.size() == 1) {
+        multiTabCount = 0;
+        lastPrefix.clear();
         return *candidates.begin() + " ";
     }
 
@@ -128,4 +139,28 @@ std::string getPath(std::string command) {
     }
 
     return "";
+}
+
+std::string getLongestCommonPrefix(const std::set<std::string>& candidates) {
+    if (candidates.empty()) return "";
+
+    auto it = candidates.begin();
+    std::string prefix = *it;
+    ++it;
+
+    while (it != candidates.end()) {
+        const std::string& current = *it;
+        size_t j = 0;
+
+        while (j < prefix.size() && j < current.size() && prefix[j] == current[j]) {
+            j++;
+        }
+
+        prefix = prefix.substr(0, j);
+        if (prefix.empty()) break;
+
+        ++it;
+    }
+
+    return prefix;
 }
