@@ -18,14 +18,34 @@ std::vector<std::string> parseInputs(const std::string& input) {
 
     bool insideSingleQuotes = false;
     bool insideDoubleQuotes = false;
+    bool escape = false;
     std::string currentToken;
 
     while (ss.get(c)) {
-        if (c == '\'' && !insideDoubleQuotes) {
+        if (escape) {
+            escape = false;
+            currentToken += c;
+            continue;
+        }
+        if (c == '\\') {
+            if (insideSingleQuotes) {
+                currentToken += c;
+            } else if (insideDoubleQuotes) {
+                char next = ss.peek();
+                if (next == '"' || next == '\\' || next == '$') {
+                    escape = true;
+                } else {
+                    currentToken += c;
+                }
+            } else {
+                escape = true;
+            }
+        } else if (c == '\'' && !insideDoubleQuotes) {
             insideSingleQuotes = !insideSingleQuotes;
         } else if (c == '"' && !insideSingleQuotes) {
             insideDoubleQuotes = !insideDoubleQuotes;
-        } else if (std::isspace(c) && !insideSingleQuotes && !insideDoubleQuotes) {
+        } else if (std::isspace(c) && !insideSingleQuotes &&
+                   !insideDoubleQuotes) {
             if (!currentToken.empty()) {
                 tokens.push_back(currentToken);
                 currentToken.clear();
